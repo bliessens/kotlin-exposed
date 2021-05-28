@@ -1,0 +1,48 @@
+plugins {
+    // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
+
+    // Apply the java-library plugin for API and implementation separation.
+    id 'java-library'
+    id 'idea'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Align versions of all Kotlin components
+    implementation platform('org.jetbrains.kotlin:kotlin-bom')
+
+    // Use the Kotlin JDK 8 standard library.
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+
+    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
+    implementation 'com.google.guava:guava:30.0-jre'
+
+    implementation 'org.jetbrains.exposed:exposed:0.17.13'
+    implementation "org.slf4j:slf4j-api:1.7.25"
+    runtimeOnly 'org.postgresql:postgresql:42.2.20'
+    runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
+    // Use the Kotlin test library.
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+
+    // Use the Kotlin JUnit integration.
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
+
+    // This dependency is exported to consumers, that is to say found on their compile classpath.
+    api 'org.apache.commons:commons-math3:3.6.1'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+
+        outputDir = file("$rootDir/out/production/$name")
+        testOutputDir = file("$rootDir/out/test/$name")
+
+        excludeDirs += [file("$rootDir/out"), file("$rootDir/.gradle"), file("$rootDir/gradle"), file("$rootDir/.idea")]
+    }
+}
